@@ -51,10 +51,10 @@ export const BanoQabilHeroSlider: React.FC<BanoQabilHeroSliderProps> = ({ naviga
       image: REGIONAL_IMAGES.heroChitralValley.src,
       location: 'Chitral Valley & Hindu Kush, Lower Chitral',
       badge: 'OFFICIAL CIVIC INITIATIVE · KHYBER PAKHTUNKHWA',
-      headline: 'Empowering Chitral:',
-      highlightText: 'Do Good. Prove It. Transform Your Tehsil.',
+      headline: 'Empowering Lower Chitral & Drosh:',
+      highlightText: 'Civic Action. Photographic Proof. Verified Results.',
       description:
-        'Khyber Pakhtunkhwa’s pioneering civic-tech network connecting youth, community volunteers, and municipal leadership through verified community impact and rapid digital accountability.',
+        'A transparent civic platform connecting citizens, youth volunteers, and local administration through verified community initiatives in Tehsil Drosh.',
       primaryCtaText: 'Join as Citizen / Volunteer',
       primaryCtaAction: () => {
         openGateway();
@@ -62,8 +62,8 @@ export const BanoQabilHeroSlider: React.FC<BanoQabilHeroSliderProps> = ({ naviga
       secondaryCtaText: 'Report a District Problem',
       secondaryCtaAction: () => navigate('/report'),
       featuredStat: {
-        value: '14,850+',
-        label: 'Registered Citizens Across Chitral',
+        value: '48 Active',
+        label: 'Verified Volunteers in Drosh & Ayun',
       },
     },
     {
@@ -71,17 +71,17 @@ export const BanoQabilHeroSlider: React.FC<BanoQabilHeroSliderProps> = ({ naviga
       image: REGIONAL_IMAGES.heroChitralVolunteers.src,
       location: 'Shishi Koh & Drosh Valley, Lower Chitral',
       badge: 'YOUTH EMPOWERMENT & VOLUNTEER CORPS',
-      headline: 'Recognizing Local Champions:',
-      highlightText: 'Earn Points, Badges & Official Certifications.',
+      headline: 'Community Leadership in Drosh:',
+      highlightText: 'Documented Impact & Citizen Recognition.',
       description:
-        'Every tree planted, road cleaned, and emergency assistance provided in Drosh is verified by Civic AI, awarded verified reputation points, and celebrated on the District Leaderboard.',
+        'Every road cleaned, waterline repaired, and tree planted in Drosh is verified with authentic photographs and recognized on the District Registry.',
       primaryCtaText: 'Explore Volunteer Drives',
       primaryCtaAction: () => navigate('/opportunities'),
       secondaryCtaText: 'View District Leaderboard',
       secondaryCtaAction: () => navigate('/leaderboard'),
       featuredStat: {
-        value: '8,294',
-        label: 'Verified Community Action Hours',
+        value: '42 Projects',
+        label: 'Citizen-Led Local Initiatives',
       },
     },
     {
@@ -90,16 +90,16 @@ export const BanoQabilHeroSlider: React.FC<BanoQabilHeroSliderProps> = ({ naviga
       location: 'Chitral River Basin & Municipal Infrastructure',
       badge: 'TRANSPARENT DISTRICT GOVERNANCE',
       headline: 'Direct Grievance Redressal:',
-      highlightText: 'Broken Roads, Cleanliness & Emergency Works.',
+      highlightText: 'Pothole Repairs, Water & Solid Waste Clearing.',
       description:
-        'Submit photographic and GPS-pinned evidence directly to the Deputy Commissioner Office, TMA Drosh, and C&W Department. Track the repair lifecycle from inspection to completion.',
+        'Submit verified photographic records directly to TMA Drosh and C&W Department. Monitor case progress from initial submission to final resolution.',
       primaryCtaText: 'Submit Grievance Now',
       primaryCtaAction: () => navigate('/report'),
       secondaryCtaText: 'Track Existing Complaint',
       secondaryCtaAction: () => navigate('/complaints'),
       featuredStat: {
-        value: '94.2%',
-        label: 'Verified Resolution Efficiency',
+        value: '91.7%',
+        label: 'Tehsil Drosh Resolution Efficiency',
       },
     },
   ];
@@ -181,14 +181,14 @@ export const BanoQabilHeroSlider: React.FC<BanoQabilHeroSliderProps> = ({ naviga
           <div className="max-w-3xl my-auto space-y-5 lg:space-y-6">
             {/* Kicker Tag */}
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-300">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
               <span>{slides[currentSlide].badge}</span>
             </div>
 
-            {/* Big Bold Headline (Bano Qabil Style Impact) */}
+            {/* Big Bold Headline */}
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] text-white drop-shadow-md">
               {slides[currentSlide].headline}{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-green-200">
+              <span className="text-emerald-400">
                 {slides[currentSlide].highlightText}
               </span>
             </h1>

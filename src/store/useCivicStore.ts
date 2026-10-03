@@ -128,8 +128,17 @@ export interface CivicState {
   closeAdminIdentityModal: () => void;
   openGateway: () => void;
   closeGateway: () => void;
-  loginAsCitizen: (customName?: string) => void;
-  registerCitizen: (data: { fullName: string; email: string; phone: string; locationName: string }) => void;
+  loginAsCitizen: (identifier: string, password?: string) => { success: boolean; error?: string };
+  registerCitizen: (data: {
+    fullName: string;
+    cnic: string;
+    email: string;
+    password: string;
+    phone: string;
+    locationName: string;
+    district?: string;
+    tehsil?: string;
+  }) => { success: boolean; error?: string };
   loginAsAdmin: (username: string, password: string) => { success: boolean; error?: string };
   logout: () => void;
   switchDemoUser: (userId: string) => void;
@@ -269,29 +278,78 @@ export const useCivicStore = create<CivicState>()(
         set({ isOnboardingOpen: false });
       },
 
-      loginAsCitizen: (customName?: string) => {
+      loginAsCitizen: (identifier: string, password?: string) => {
         const state = get();
-        let user = state.users.find((u) => u.id === 'user-mz') || SEED_USERS[0];
-        let profile = state.profiles.find((p) => p.userId === 'user-mz') || SEED_PROFILES[0];
+        const id = (identifier || '').trim().toLowerCase();
+        const pw = (password || '').trim();
 
-        if (customName && customName.trim()) {
-          const matchedProfile = state.profiles.find(
-            (p) => p.fullName.toLowerCase() === customName.trim().toLowerCase()
-          );
-          if (matchedProfile) {
-            profile = matchedProfile;
-            user = state.users.find((u) => u.id === matchedProfile.userId) || user;
-          } else {
-            profile = {
-              ...profile,
-              fullName: customName.trim(),
-            };
+        if (!id) {
+          return { success: false, error: 'Please enter your registered Email, CNIC, or Mobile Number.' };
+        }
+        if (!pw) {
+          return { success: false, error: 'Please enter your account password.' };
+        }
+
+        // Clean identifier for phone/cnic matching (remove dashes, spaces, plus)
+        const cleanId = id.replace(/[\s-+]/g, '');
+
+        // Strict lookup in registered users
+        const matchedUser = state.users.find((u) => {
+          const uEmail = (u.email || '').toLowerCase().trim();
+          const uPhone = (u.phone || '').replace(/[\s-+]/g, '');
+          const uCnic = (u.cnic || '').replace(/[\s-]/g, '');
+          const uId = (u.id || '').toLowerCase();
+
+          if (uEmail && uEmail === id) return true;
+          if (cleanId && uPhone && uPhone === cleanId) return true;
+          if (cleanId && uCnic && uCnic === cleanId) return true;
+          if (uId === id) return true;
+
+          // Check associated profile
+          const userProfile = state.profiles.find((p) => p.userId === u.id);
+          if (userProfile) {
+            const pName = (userProfile.fullName || '').toLowerCase().trim();
+            const pSlug = (userProfile.slug || '').toLowerCase().trim();
+            if (pName === id || pSlug === id) return true;
           }
+          return false;
+        });
+
+        if (!matchedUser) {
+          return {
+            success: false,
+            error: 'Invalid Credentials: No registered citizen profile found for this identifier. Please verify your credentials or sign up.',
+          };
+        }
+
+        // Validate password
+        const expectedPassword = matchedUser.password || 'Password123';
+        if (pw !== expectedPassword) {
+          return {
+            success: false,
+            error: 'Invalid Credentials: The password you entered is incorrect. Please try again.',
+          };
+        }
+
+        // Retrieve or create associated profile
+        let matchedProfile = state.profiles.find((p) => p.userId === matchedUser.id);
+        if (!matchedProfile) {
+          matchedProfile = {
+            userId: matchedUser.id,
+            slug: (matchedUser.email || 'citizen').split('@')[0],
+            fullName: matchedUser.email ? matchedUser.email.split('@')[0] : 'Citizen Volunteer',
+            locationId: 'loc-drosh',
+            locationName: 'Drosh, Lower Chitral',
+            bio: 'Registered citizen volunteer contributing to local civic improvements in Lower Chitral.',
+            avatarColor: '#1F6B43',
+            level: 'Community Volunteer',
+            joinedAt: matchedUser.createdAt || new Date().toISOString(),
+          };
         }
 
         set({
-          currentUser: { ...user, role: 'citizen' },
-          currentProfile: profile,
+          currentUser: { ...matchedUser, role: 'citizen' },
+          currentProfile: matchedProfile,
           isAuthenticated: true,
           isOnboardingOpen: false,
           isAdminAuthModalOpen: false,
@@ -302,32 +360,65 @@ export const useCivicStore = create<CivicState>()(
             isGatewayOpen: false,
           },
         });
+
+        return { success: true };
       },
 
-      registerCitizen: ({ fullName, email, phone, locationName }) => {
+      registerCitizen: ({ fullName, cnic, email, password, phone, locationName, district, tehsil }) => {
+        const state = get();
+        const cleanEmail = email.trim().toLowerCase();
+        const cleanCnic = cnic.replace(/[\s-]/g, '');
+
+        // Check if email or CNIC already registered
+        const existingEmail = state.users.find(
+          (u) => (u.email || '').toLowerCase().trim() === cleanEmail
+        );
+        if (existingEmail) {
+          return {
+            success: false,
+            error: 'An account with this email address already exists. Please log in instead.',
+          };
+        }
+
+        if (cleanCnic) {
+          const existingCnic = state.users.find(
+            (u) => (u.cnic || '').replace(/[\s-]/g, '') === cleanCnic
+          );
+          if (existingCnic) {
+            return {
+              success: false,
+              error: 'An account with this CNIC number is already registered.',
+            };
+          }
+        }
+
         const newUserId = `user-cit-${Date.now()}`;
         const newUser: User = {
           id: newUserId,
           role: 'citizen',
-          email,
-          phone,
+          email: cleanEmail,
+          phone: phone.trim(),
+          cnic: cnic.trim(),
+          password: password.trim(),
           createdAt: new Date().toISOString(),
           verificationStatus: 'verified',
         };
 
         const newProfile: Profile = {
           userId: newUserId,
-          slug: fullName.toLowerCase().replace(/\s+/g, '-'),
-          fullName,
+          slug: fullName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+          fullName: fullName.trim(),
           locationId: 'loc-drosh',
-          locationName,
+          locationName: locationName.trim() || 'Drosh, Lower Chitral',
+          district: district || 'Lower Chitral',
+          tehsil: tehsil || 'Tehsil Drosh',
+          cnic: cnic.trim(),
           bio: 'Registered citizen volunteer contributing to local civic improvements in Lower Chitral.',
           avatarColor: '#1F6B43',
           level: 'Active Citizen',
           joinedAt: new Date().toISOString(),
         };
 
-        const state = get();
         set({
           users: [newUser, ...state.users],
           profiles: [newProfile, ...state.profiles],
@@ -342,6 +433,8 @@ export const useCivicStore = create<CivicState>()(
             isGatewayOpen: false,
           },
         });
+
+        return { success: true };
       },
 
       registerAdmin: (data: AdminRegistrationData) => {

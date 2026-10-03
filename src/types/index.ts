@@ -48,6 +48,8 @@ export interface User {
   email: string;
   phone: string;
   createdAt: string;
+  cnic?: string;
+  password?: string;
   designation?: string;
   verificationStatus?: 'verified' | 'pending_verification' | 'none';
   verificationDocUrl?: string;
@@ -63,6 +65,9 @@ export interface Profile {
   avatarColor: string;
   level: string;
   joinedAt: string;
+  cnic?: string;
+  district?: string;
+  tehsil?: string;
 }
 
 export interface CivicScoreHistory {

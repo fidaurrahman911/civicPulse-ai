@@ -104,15 +104,15 @@ export const LeaderboardPage: React.FC<LeaderboardPageProps> = ({ navigate }) =>
       {/* Scoped Statistics Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div className="p-4 rounded-lg bg-white border border-[#E3E8E6] shadow-2xs">
-          <span className="text-[11px] text-[#4B5A6B] block">Registered Citizens</span>
-          <span className="text-xl font-bold font-tabular text-[#0F1B2D] mt-0.5 block">
-            {formatNumber(stats.registeredCitizens)}
+          <span className="text-[11px] text-[#4B5A6B] block">Active Volunteers</span>
+          <span className="text-xl font-bold font-tabular text-[#1F6B43] mt-0.5 block">
+            {stats.activeVolunteers} Active
           </span>
           <span className="text-[10px] text-[#4B5A6B]">{stats.scope}</span>
         </div>
 
         <div className="p-4 rounded-lg bg-white border border-[#E3E8E6] shadow-2xs">
-          <span className="text-[11px] text-[#4B5A6B] block">Verified Activities</span>
+          <span className="text-[11px] text-[#4B5A6B] block">Verified Projects</span>
           <span className="text-xl font-bold font-tabular text-[#0F1B2D] mt-0.5 block">
             {formatNumber(stats.verifiedActivities)}
           </span>
@@ -141,9 +141,9 @@ export const LeaderboardPage: React.FC<LeaderboardPageProps> = ({ navigate }) =>
       {/* Helpful Hint on Inspecting Citizen Work & Cleanliness Drives */}
       <div className="p-3.5 rounded-lg bg-[#E8F2EC]/60 border border-[#1F6B43]/20 flex items-center justify-between gap-3 text-xs text-[#174F32]">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-[#1F6B43] shrink-0" />
+          <Award className="w-4 h-4 text-[#1F6B43] shrink-0" />
           <span>
-            <strong>Inspect Community Work & Cleanliness Drives:</strong> Click on any citizen below to see their verified work, what kind of cleanliness drives they managed, and get step-by-step action guides so you can replicate their impact in your area.
+            <strong>Inspect Community Work & Cleanliness Drives:</strong> Click on any citizen below to review their verified field record, volunteer mobilization history, and road restoration accomplishments.
           </span>
         </div>
       </div>

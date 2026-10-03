@@ -23,54 +23,54 @@ export const DistrictImpactCounters: React.FC = () => {
 
   const stats = [
     {
-      label: 'Registered Citizens & Youth',
-      value: '14,850+',
-      growth: '+310 this month',
-      sublabel: 'Across Drosh, Ayun & Chitral tehsils',
+      label: 'Active Verified Volunteers',
+      value: '48',
+      growth: 'Tehsil Drosh & Ayun',
+      sublabel: 'Dedicated citizen corps across local wards',
       icon: Users,
-      color: 'text-emerald-700 bg-emerald-50 border-emerald-200',
+      color: 'text-[#1F6B43] bg-[#E8F2EC] border-[#1F6B43]/30',
     },
     {
-      label: 'Verified Community Actions',
-      value: '8,294',
-      growth: '100% AI Audited',
-      sublabel: 'Cleanliness, tree plantation & relief',
+      label: 'Verified Community Projects',
+      value: '42',
+      growth: 'Field Audited',
+      sublabel: 'Cleanliness, water restoration & road works',
       icon: CheckCircle2,
       color: 'text-[#1F6B43] bg-[#E8F2EC] border-[#1F6B43]/30',
     },
     {
-      label: 'Resolution Rate (Grievances)',
+      label: 'Grievance Resolution Rate',
       value: `${resolutionRate}%`,
-      growth: 'Avg 4.2 days',
+      growth: 'Avg 3.8 days',
       sublabel: 'TMA Drosh & C&W Department dispatch',
       icon: ShieldCheck,
       color: 'text-[#1F5FA8] bg-blue-50 border-blue-200',
     },
     {
-      label: 'Union Councils Active',
-      value: '36',
-      growth: 'Lower & Upper Chitral',
-      sublabel: 'From Arandu border to Booni valley',
+      label: 'Union Councils Covered',
+      value: '6',
+      growth: 'Lower Chitral',
+      sublabel: 'Drosh 1, Drosh 2, Ayun, Shishi & Ashret',
       icon: MapPin,
-      color: 'text-purple-700 bg-purple-50 border-purple-200',
+      color: 'text-slate-700 bg-slate-100 border-slate-300',
     },
   ];
 
   return (
-    <section className="bg-gradient-to-b from-[#F6F8F7] to-white border-y border-[#E3E8E6] py-14">
+    <section className="bg-[#F8FAF9] border-y border-[#E3E8E6] py-12">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
             <div className="text-xs font-bold uppercase tracking-wider text-[#1F6B43] mb-1">
-              Real-Time District Metrics
+              District Lower Chitral · Tehsil Drosh
             </div>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-[#0F1B2D]">
-              Verified Impact at a Glance
+              Verified Municipal & Civic Metrics
             </h3>
           </div>
           <div className="text-xs text-[#4B5A6B] flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
-            <span>Updated hourly from Deputy Commissioner & Tehsil databases</span>
+            <span className="w-2 h-2 rounded-full bg-[#1F6B43]" />
+            <span>Official records verified by Tehsil Drosh Administration</span>
           </div>
         </div>
 
